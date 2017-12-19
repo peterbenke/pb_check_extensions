@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2017-12-19T10:00:00Z" product-name="pb_check_extensions">
+		<header/>
+		<body>
+			<trans-unit id="task.checkExtensionsTask.title">
+				<target>Prüfe Extensions auf Updates</target>
+			</trans-unit>
+			<trans-unit id="task.checkExtensionsTask.description">
+				<target>Prüft, ob für installierte Extensions ein Update verfügbar ist und schickt eine E-Mail</target>
+			</trans-unit>
+			<trans-unit id="task.checkExtensionsTask.current">
+				<target>Derzeit:</target>
+			</trans-unit>
+			<trans-unit id="task.checkExtensionsTask.available">
+				<target>Verfügbar:</target>
+			</trans-unit>
+			<trans-unit id="task.checkExtensionsTask.extensions">
+				<target>Extensions:</target>
+			</trans-unit>
+			<trans-unit id="task.checkExtensionsTask.error">
+				<target>Fehler</target>
+			</trans-unit>
+			<trans-unit id="task.checkExtensionsTask.email.success.intro.1">
+				<target>Neue Extension-Versionen verfügbar:</target>
+			</trans-unit>
+			<trans-unit id="task.checkExtensionsTask.email.error.intro.1">
+				<target>Die folgenden Extensions konnten nicht in der Extension Liste gefunden werden.</target>
+			</trans-unit>
+			<trans-unit id="task.checkExtensionsTask.email.error.intro.2">
+				<target>Möglicherweise existieren sie nicht im TYPO3 TER oder Du hast die Extensionliste nicht aktualisert...?</target>
+			</trans-unit>
+			<trans-unit id="task.checkExtensionsTask.email.error.intro.3">
+				<target>(Du kannst Extensions in der Planer-Konfiguration ausschließen)</target>
+			</trans-unit>
+			<trans-unit id="task.checkExtensionsTask.fieldProvider.emailSubject.label">
+				<target>E-Mail Betreff</target>
+			</trans-unit>
+			<trans-unit id="task.checkExtensionsTask.fieldProvider.emailMailFrom.label">
+				<target>E-Mail-Adresse von (from)</target>
+			</trans-unit>
+			<trans-unit id="task.checkExtensionsTask.fieldProvider.emailMailTo.label">
+				<target>Schicke E-Mail an folgende Adressen (Komma separiert)</target>
+			</trans-unit>
+			<trans-unit id="task.checkExtensionsTask.fieldProvider.excludeExtensionsFromCheck.label">
+				<target>Schließe Extensions (key) von diesem Check aus (Komma separiert)</target>
+			</trans-unit>
+			<trans-unit id="task.checkExtensionsTask.fieldProvider.emailSubject.validation">
+				<target>Bitte gib einen E-Mail-Betreff ein</target>
+			</trans-unit>
+			<trans-unit id="task.checkExtensionsTask.fieldProvider.emailMail.validation">
+				<target>E-Mail-Adresse ist nicht gültig</target>
+			</trans-unit>
+
+		</body>
+	</file>
+</xliff>
