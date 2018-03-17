@@ -16,3 +16,4 @@ Introduction
     :titlesonly:
 
     WhatDoesItDo/Index
+    Thanks/Index
