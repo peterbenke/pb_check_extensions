@@ -62,7 +62,7 @@ class CheckExtensionsTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask{
 		$emailSuccessMessage = '';
 		$emailErrorMessage = '';
 
-		$excludeExtensions = \Allplan\AllplanTools\Utility\StringUtility::explodeAndTrim(',', $this->excludeExtensionsFromCheck);
+		$excludeExtensions = \PeterBenke\PbCheckExtensions\Utility\StringUtility::explodeAndTrim(',', $this->excludeExtensionsFromCheck);
 
 		// Loop through the installed extensions
 		foreach($extensions as $extensionKey => $extensionData){
@@ -116,7 +116,7 @@ class CheckExtensionsTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask{
 
 		}
 
-		$emailTos = \Allplan\AllplanTools\Utility\StringUtility::explodeAndTrim(',', $this->emailMailTo);
+		$emailTos = \PeterBenke\PbCheckExtensions\Utility\StringUtility::explodeAndTrim(',', $this->emailMailTo);
 
 		if(!empty($emailSuccessMessage)){
 			$emailSuccessMessageIntro = '';

@@ -109,7 +109,7 @@ class CheckExtensionsTaskAdditionalFieldProvider implements \TYPO3\CMS\Scheduler
 		}
 
 		// Validate email to addresses
-		$emailMailTos = \Allplan\AllplanTools\Utility\StringUtility::explodeAndTrim(',', $submittedData['emailMailTo']);
+		$emailMailTos = \PeterBenke\PbCheckExtensions\Utility\StringUtility::explodeAndTrim(',', $submittedData['emailMailTo']);
 
 		foreach($emailMailTos as $emailMailTo){
 			if(empty($emailMailTo) || filter_var($emailMailTo, FILTER_VALIDATE_EMAIL) === FALSE) {
