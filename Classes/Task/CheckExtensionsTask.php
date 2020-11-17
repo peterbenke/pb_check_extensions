@@ -2,11 +2,30 @@
 namespace PeterBenke\PbCheckExtensions\Task;
 
 /**
+ * PbCheckExtensions
+ */
+use PeterBenke\PbCheckExtensions\Utility\StringUtility as PBStringUtility;
+
+/**
+ * TYPO3
+ */
+use TYPO3\CMS\Core\Mail\MailMessage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Extensionmanager\Domain\Model\Extension;
+use TYPO3\CMS\Extensionmanager\Domain\Repository\ExtensionRepository;
+use TYPO3\CMS\Extensionmanager\Utility\ListUtility;
+use TYPO3\CMS\Scheduler\Task\AbstractTask;
+
+/**
  * Class CheckExtensionsTask
  * @package PeterBenke\PbCheckExtensions\Task
  * @author Peter Benke <info@typomotor.de>
  */
-class CheckExtensionsTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask{
+class CheckExtensionsTask extends AbstractTask
+{
 
 	/**
 	 * @var string
@@ -29,7 +48,7 @@ class CheckExtensionsTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask{
 	public $excludeExtensionsFromCheck;
 
 	/**
-	 * Executs the scheduler job
+	 * Executes the scheduler job
 	 * @return bool
 	 */
 	public function execute(){
@@ -40,29 +59,31 @@ class CheckExtensionsTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask{
 	}
 
 	/**
-	 * Checks, if there are updates available fo rinstalled extensions
+	 * Checks, if there are updates available for installed extensions
+	 * @author Peter Benke <info@typomotor.de>
 	 */
-	protected function checkExtensions(){
+	protected function checkExtensions()
+	{
 
 		/**
-		 * @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager
-		 * @var \TYPO3\CMS\Extensionmanager\Utility\ListUtility $listUtility
-		 * @var \TYPO3\CMS\Extensionmanager\Domain\Repository\ExtensionRepository $extensionRepository
-		 * @var \TYPO3\CMS\Core\Mail\MailMessage $email
+		 * @var ObjectManager $objectManager
+		 * @var ListUtility $listUtility
+		 * @var ExtensionRepository $extensionRepository
+		 * @var MailMessage $email
 		 */
 
 		// Create objects
-		$objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\ObjectManager::class);
-		$listUtility = $objectManager->get(\TYPO3\CMS\Extensionmanager\Utility\ListUtility::class);
+		$objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+		$listUtility = $objectManager->get(ListUtility::class);
 
-		$extensionRepository = $objectManager->get(\TYPO3\CMS\Extensionmanager\Domain\Repository\ExtensionRepository::class);
+		$extensionRepository = $objectManager->get(ExtensionRepository::class);
 		$extensions = $listUtility->getAvailableAndInstalledExtensionsWithAdditionalInformation();
 
-		$email = $objectManager->get(\TYPO3\CMS\Core\Mail\MailMessage::class);
+		$email = $objectManager->get(MailMessage::class);
 		$emailSuccessMessage = '';
 		$emailErrorMessage = '';
 
-		$excludeExtensions = \PeterBenke\PbCheckExtensions\Utility\StringUtility::explodeAndTrim(',', $this->excludeExtensionsFromCheck);
+		$excludeExtensions = PBStringUtility::explodeAndTrim(',', $this->excludeExtensionsFromCheck);
 
 		// Loop through the installed extensions
 		foreach($extensions as $extensionKey => $extensionData){
@@ -77,6 +98,7 @@ class CheckExtensionsTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask{
 				// Only extensions, which are not excluded
 				!in_array($extensionKey, $excludeExtensions)
 			){
+
 				/*
 				echo $extensionKey . ':<br>';
 				echo 'Title: ' . $extensionData['title'];
@@ -90,13 +112,13 @@ class CheckExtensionsTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask{
 				echo '<hr>';
 				*/
 
-				$versionInt = \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger($extensionData['version']);
+				$versionInt = VersionNumberUtility::convertVersionNumberToInteger($extensionData['version']);
 				$extensionObject = $extensionRepository->findHighestAvailableVersion($extensionKey);
 
-				if ($extensionObject instanceof \TYPO3\CMS\Extensionmanager\Domain\Model\Extension) {
+				if ($extensionObject instanceof Extension){
 
 					$highestAvailableVersion = $extensionObject->getVersion();
-					$highestAvailableVersionInt = \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger($highestAvailableVersion);
+					$highestAvailableVersionInt = VersionNumberUtility::convertVersionNumberToInteger($highestAvailableVersion);
 
 					if($highestAvailableVersionInt > $versionInt){
 						$emailSuccessMessage .= $extensionKey . ':' . PHP_EOL;
@@ -116,7 +138,7 @@ class CheckExtensionsTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask{
 
 		}
 
-		$emailTos = \PeterBenke\PbCheckExtensions\Utility\StringUtility::explodeAndTrim(',', $this->emailMailTo);
+		$emailTos = PBStringUtility::explodeAndTrim(',', $this->emailMailTo);
 
 		if(!empty($emailSuccessMessage)){
 			$emailSuccessMessageIntro = '';
@@ -151,10 +173,12 @@ class CheckExtensionsTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask{
 	/**
 	 * @param string $key
 	 * @return null|string
+	 * @author Peter Benke <info@typomotor.de>
 	 */
-	protected function translate($key){
+	protected function translate(string $key)
+	{
 
-		return \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($key, 'pb_check_extensions');
+		return LocalizationUtility::translate($key, 'pb_check_extensions');
 
 	}
 

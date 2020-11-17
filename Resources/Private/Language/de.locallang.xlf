@@ -28,7 +28,7 @@
 				<target>Die folgenden Extensions konnten nicht in der Extension Liste gefunden werden.</target>
 			</trans-unit>
 			<trans-unit id="task.checkExtensionsTask.email.error.intro.2">
-				<target>Möglicherweise existieren sie nicht im TYPO3 TER oder Du hast die Extensionliste nicht aktualisert...?</target>
+				<target>Möglicherweise konnte TYPO3 diese Extension nicht für die Extensionliste aktualisieren oder Du hast die Extensionliste nicht aktualisert...?</target>
 			</trans-unit>
 			<trans-unit id="task.checkExtensionsTask.email.error.intro.3">
 				<target>(Du kannst Extensions in der Planer-Konfiguration ausschließen)</target>

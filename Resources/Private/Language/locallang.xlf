@@ -28,7 +28,7 @@
 				<source>The following extensions could not be found in extension list.</source>
 			</trans-unit>
 			<trans-unit id="task.checkExtensionsTask.email.error.intro.2">
-				<source>Maybe they do not exist in the TYPO3 TER or you did not update the extension list before...?</source>
+				<source>Maybe TYPO3 could not update this extension for the extension list or you did not update the extension list before...?</source>
 			</trans-unit>
 			<trans-unit id="task.checkExtensionsTask.email.error.intro.3">
 				<source>(You can exclude extensions in the scheduler configuration)</source>

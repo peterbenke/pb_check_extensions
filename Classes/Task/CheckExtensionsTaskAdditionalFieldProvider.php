@@ -2,23 +2,42 @@
 namespace PeterBenke\PbCheckExtensions\Task;
 
 /**
+ * PbCheckExtensions
+ */
+use PeterBenke\PbCheckExtensions\Utility\StringUtility as PBStringUtility;
+
+/**
+ * TYPO3
+ */
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Scheduler\AdditionalFieldProviderInterface;
+use TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
+use TYPO3\CMS\Scheduler\Task\AbstractTask;
+
+/**
  * Class CheckExtensionsTaskAdditionalFieldProvider
  * @package PeterBenke\PbCheckExtensions\Task
  * @author Peter Benke <info@typomotor.de>
  */
-class CheckExtensionsTaskAdditionalFieldProvider implements \TYPO3\CMS\Scheduler\AdditionalFieldProviderInterface {
+class CheckExtensionsTaskAdditionalFieldProvider implements AdditionalFieldProviderInterface
+{
 
 	/**
 	 * Create additional fields
 	 * @param array $taskInfo
-	 * @param \PeterBenke\PbCheckExtensions\Task\CheckExtensionsTask $task
-	 * @param \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $parentObject
+	 * @param CheckExtensionsTask|AbstractTask $task
+	 * @param SchedulerModuleController $parentObject
 	 * @return array
+	 * @author Peter Benke <info@typomotor.de>
 	 */
-	public function getAdditionalFields(array &$taskInfo, $task, \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $parentObject) {
+	public function getAdditionalFields(array &$taskInfo, $task, SchedulerModuleController $parentObject)
+	{
+
+		$cmd = $parentObject->__get('CMD');
 
 		if (empty($taskInfo['emailSubject'])) {
-			if ($parentObject->CMD == 'add') {
+			if ($cmd == 'add') {
 				$taskInfo['emailSubject'] = '';
 			} else {
 				$taskInfo['emailSubject'] = $task->emailSubject;
@@ -26,7 +45,7 @@ class CheckExtensionsTaskAdditionalFieldProvider implements \TYPO3\CMS\Scheduler
 		}
 
 		if (empty($taskInfo['emailMailFrom'])) {
-			if ($parentObject->CMD == 'add') {
+			if ($cmd == 'add') {
 				$taskInfo['emailMailFrom'] = '';
 			} else {
 				$taskInfo['emailMailFrom'] = $task->emailMailFrom;
@@ -34,7 +53,7 @@ class CheckExtensionsTaskAdditionalFieldProvider implements \TYPO3\CMS\Scheduler
 		}
 
 		if (empty($taskInfo['emailMailTo'])) {
-			if ($parentObject->CMD == 'add') {
+			if ($cmd == 'add') {
 				$taskInfo['emailMailTo'] = '';
 			} else {
 				$taskInfo['emailMailTo'] = $task->emailMailTo;
@@ -42,52 +61,49 @@ class CheckExtensionsTaskAdditionalFieldProvider implements \TYPO3\CMS\Scheduler
 		}
 
 		if (empty($taskInfo['excludeExtensionsFromCheck'])) {
-			if ($parentObject->CMD == 'add') {
+			if ($cmd == 'add') {
 				$taskInfo['excludeExtensionsFromCheck'] = '';
 			} else {
 				$taskInfo['excludeExtensionsFromCheck'] = $task->excludeExtensionsFromCheck;
 			}
 		}
 
+		// Input fields
+		return [
 
-		// Inputfields
-		$additionalFields = array(
-
-			'task_emailSubject' => array(
+			'task_emailSubject' => [
 				'code' => '<input type="text" name="tx_scheduler[emailSubject]" id="task_emailSubject" value="' . $taskInfo['emailSubject'] . '" />',
 				'label' => $this->translate('task.checkExtensionsTask.fieldProvider.emailSubject.label')
-			),
+			],
 
-			'task_emailMailFrom' => array(
+			'task_emailMailFrom' => [
 				'code' => '<input type="text" name="tx_scheduler[emailMailFrom]" id="task_emailMailFrom" value="' . $taskInfo['emailMailFrom'] . '" />',
 				'label' => $this->translate('task.checkExtensionsTask.fieldProvider.emailMailFrom.label')
-			),
+			],
 
-			'task_emailMailTo' => array(
+			'task_emailMailTo' => [
 				'code' => '<input type="text" name="tx_scheduler[emailMailTo]" id="task_emailMailTo" value="' . $taskInfo['emailMailTo'] . '" />',
 				'label' => $this->translate('task.checkExtensionsTask.fieldProvider.emailMailTo.label')
-			),
+			],
 
-			'task_excludeExtensionsFromCheck' => array(
-				// 'code' => '<input type="text" name="tx_scheduler[excludeExtensionsFromCheck]" id="task_excludeExtensionsFromCheck" value="' . $taskInfo['excludeExtensionsFromCheck'] . '" />',
+			'task_excludeExtensionsFromCheck' => [
 				'code' => '<textarea name="tx_scheduler[excludeExtensionsFromCheck]" id="task_excludeExtensionsFromCheck">' . $taskInfo['excludeExtensionsFromCheck'] . '</textarea>',
 				'label' => $this->translate('task.checkExtensionsTask.fieldProvider.excludeExtensionsFromCheck.label')
-			),
+			],
 
-		);
-
-		return $additionalFields;
+		];
 
 	}
-
 
 	/**
 	 * Validates the input value(s)
 	 * @param array $submittedData
-	 * @param \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $parentObject
+	 * @param SchedulerModuleController $parentObject
 	 * @return bool
+	 * @author Peter Benke <info@typomotor.de>
 	 */
-	public function validateAdditionalFields(array &$submittedData, \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $parentObject) {
+	public function validateAdditionalFields(array &$submittedData, SchedulerModuleController $parentObject)
+	{
 
 		$ok = true;
 		$errorMessages = [];
@@ -109,7 +125,7 @@ class CheckExtensionsTaskAdditionalFieldProvider implements \TYPO3\CMS\Scheduler
 		}
 
 		// Validate email to addresses
-		$emailMailTos = \PeterBenke\PbCheckExtensions\Utility\StringUtility::explodeAndTrim(',', $submittedData['emailMailTo']);
+		$emailMailTos = PBStringUtility::explodeAndTrim(',', $submittedData['emailMailTo']);
 
 		foreach($emailMailTos as $emailMailTo){
 			if(empty($emailMailTo) || filter_var($emailMailTo, FILTER_VALIDATE_EMAIL) === FALSE) {
@@ -122,34 +138,36 @@ class CheckExtensionsTaskAdditionalFieldProvider implements \TYPO3\CMS\Scheduler
 			return true;
 		}
 
-		$parentObject->addMessage(implode(' / ', $errorMessages), \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
+		$message = implode(' / ', $errorMessages);
+		$parentObject->__call('addMessage', [$message, FlashMessage::ERROR]);
 		return false;
 
 	}
 
-
 	/**
 	 * Saves the input value
 	 * @param array $submittedData
-	 * @param \TYPO3\CMS\Scheduler\Task\AbstractTask $task
+	 * @param AbstractTask|CheckExtensionsTask $task
+	 * @author Peter Benke <info@typomotor.de>
 	 */
-	public function saveAdditionalFields(array $submittedData, \TYPO3\CMS\Scheduler\Task\AbstractTask $task) {
-
+	public function saveAdditionalFields(array $submittedData, AbstractTask $task)
+	{
 		$task->emailSubject = trim($submittedData['emailSubject']);
 		$task->emailMailFrom = trim($submittedData['emailMailFrom']);
 		$task->emailMailTo = trim($submittedData['emailMailTo']);
 		$task->excludeExtensionsFromCheck = trim($submittedData['excludeExtensionsFromCheck']);
-
 	}
 
-
 	/**
+	 * Translate a given string
 	 * @param string $key
-	 * @return null|string
+	 * @return string
+	 * @author Peter Benke <info@typomotor.de>
 	 */
-	protected function translate($key){
+	protected function translate(string $key)
+	{
 
-		return \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($key, 'pb_check_extensions');
+		return LocalizationUtility::translate($key, 'pb_check_extensions');
 
 	}
 
