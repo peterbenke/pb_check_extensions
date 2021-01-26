@@ -79,7 +79,9 @@ class CheckExtensionsTask extends AbstractTask
 		$extensionRepository = $objectManager->get(ExtensionRepository::class);
 		$extensions = $listUtility->getAvailableAndInstalledExtensionsWithAdditionalInformation();
 
-		$email = $objectManager->get(MailMessage::class);
+        $email = $objectManager->get(MailMessage::class);
+
+
 		$emailSuccessMessage = '';
 		$emailErrorMessage = '';
 
@@ -148,7 +150,8 @@ class CheckExtensionsTask extends AbstractTask
 				->setFrom($this->emailMailFrom)
 				->setTo($emailTos)
 				->setSubject($this->emailSubject)
-				->setBody($emailSuccessMessageIntro . $emailSuccessMessage)
+				->text($emailSuccessMessageIntro . $emailSuccessMessage)
+				->html($emailSuccessMessageIntro ."<hr><br>" . nl2br( $emailSuccessMessage))
 				->send();
 		}
 
@@ -164,7 +167,8 @@ class CheckExtensionsTask extends AbstractTask
 				->setFrom($this->emailMailFrom)
 				->setTo($emailTos)
 				->setSubject($this->emailSubject . ' - ' . $this->translate('task.checkExtensionsTask.error'))
-				->setBody($emailErrorMessageIntro . $emailErrorMessage)
+				->text($emailErrorMessageIntro . $emailErrorMessage)
+				->html($emailErrorMessageIntro . "<hr><br>" . nl2br($emailErrorMessage))
 				->send();
 		}
 

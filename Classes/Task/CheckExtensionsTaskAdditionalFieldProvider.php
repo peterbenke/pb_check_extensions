@@ -34,7 +34,7 @@ class CheckExtensionsTaskAdditionalFieldProvider implements AdditionalFieldProvi
 	public function getAdditionalFields(array &$taskInfo, $task, SchedulerModuleController $parentObject)
 	{
 
-		$cmd = $parentObject->__get('CMD');
+		$cmd = $parentObject->getCurrentAction();
 
 		if (empty($taskInfo['emailSubject'])) {
 			if ($cmd == 'add') {
