@@ -21,8 +21,6 @@ use TYPO3\CMS\Scheduler\Task\AbstractTask;
 
 /**
  * Class CheckExtensionsTask
- * @package PeterBenke\PbCheckExtensions\Task
- * @author Peter Benke <info@typomotor.de>
  */
 class CheckExtensionsTask extends AbstractTask
 {
@@ -51,7 +49,8 @@ class CheckExtensionsTask extends AbstractTask
 	 * Executes the scheduler job
 	 * @return bool
 	 */
-	public function execute(){
+	public function execute(): bool
+	{
 
 		$this->checkExtensions();
 		return true;
@@ -156,8 +155,7 @@ class CheckExtensionsTask extends AbstractTask
 		}
 
 		if(!empty($emailErrorMessage)){
-			$emailErrorMessageIntro = '';
-			$emailErrorMessageIntro .= $this->translate('task.checkExtensionsTask.email.error.intro.1') . PHP_EOL;
+			$emailErrorMessageIntro = $this->translate('task.checkExtensionsTask.email.error.intro.1') . PHP_EOL;
 			$emailErrorMessageIntro .= $this->translate('task.checkExtensionsTask.email.error.intro.2')  . PHP_EOL;
 			$emailErrorMessageIntro .= $this->translate('task.checkExtensionsTask.email.error.intro.3')  . PHP_EOL;
 			$emailErrorMessageIntro .= PHP_EOL;
@@ -176,10 +174,10 @@ class CheckExtensionsTask extends AbstractTask
 
 	/**
 	 * @param string $key
-	 * @return null|string
+	 * @return string|null
 	 * @author Peter Benke <info@typomotor.de>
 	 */
-	protected function translate(string $key)
+	protected function translate(string $key): ?string
 	{
 
 		return LocalizationUtility::translate($key, 'pb_check_extensions');

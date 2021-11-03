@@ -17,7 +17,8 @@ class StringUtility
 	 * @return array
 	 * @author Peter Benke <info@typomotor.de>
 	 */
-	public static function explodeAndTrim($delimiter, $string){
+	public static function explodeAndTrim($delimiter, $string): array
+	{
 		return array_map('trim', explode($delimiter, $string));
 	}
 

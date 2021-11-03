@@ -9,16 +9,14 @@ use PeterBenke\PbCheckExtensions\Utility\StringUtility as PBStringUtility;
 /**
  * TYPO3
  */
-use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Scheduler\AdditionalFieldProviderInterface;
 use TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
 
 /**
- * Class CheckExtensionsTaskAdditionalFieldProvider
- * @package PeterBenke\PbCheckExtensions\Task
- * @author Peter Benke <info@typomotor.de>
+ * class CheckExtensionsTaskAdditionalFieldProvider
  */
 class CheckExtensionsTaskAdditionalFieldProvider implements AdditionalFieldProviderInterface
 {
@@ -27,14 +25,14 @@ class CheckExtensionsTaskAdditionalFieldProvider implements AdditionalFieldProvi
 	 * Create additional fields
 	 * @param array $taskInfo
 	 * @param CheckExtensionsTask|AbstractTask $task
-	 * @param SchedulerModuleController $parentObject
+	 * @param SchedulerModuleController $schedulerModule
 	 * @return array
 	 * @author Peter Benke <info@typomotor.de>
 	 */
-	public function getAdditionalFields(array &$taskInfo, $task, SchedulerModuleController $parentObject)
+	public function getAdditionalFields(array &$taskInfo, $task, SchedulerModuleController $schedulerModule): array
 	{
 
-		$cmd = $parentObject->getCurrentAction();
+		$cmd = $schedulerModule->getCurrentAction();
 
 		if (empty($taskInfo['emailSubject'])) {
 			if ($cmd == 'add') {
@@ -98,11 +96,11 @@ class CheckExtensionsTaskAdditionalFieldProvider implements AdditionalFieldProvi
 	/**
 	 * Validates the input value(s)
 	 * @param array $submittedData
-	 * @param SchedulerModuleController $parentObject
+	 * @param SchedulerModuleController $schedulerModule
 	 * @return bool
 	 * @author Peter Benke <info@typomotor.de>
 	 */
-	public function validateAdditionalFields(array &$submittedData, SchedulerModuleController $parentObject)
+	public function validateAdditionalFields(array &$submittedData, SchedulerModuleController $schedulerModule): bool
 	{
 
 		$ok = true;
@@ -139,7 +137,7 @@ class CheckExtensionsTaskAdditionalFieldProvider implements AdditionalFieldProvi
 		}
 
 		$message = implode(' / ', $errorMessages);
-		$parentObject->__call('addMessage', [$message, FlashMessage::ERROR]);
+		$schedulerModule->__call('addMessage', [$message, AbstractMessage::ERROR]);
 		return false;
 
 	}
@@ -161,14 +159,12 @@ class CheckExtensionsTaskAdditionalFieldProvider implements AdditionalFieldProvi
 	/**
 	 * Translate a given string
 	 * @param string $key
-	 * @return string
+	 * @return string|null
 	 * @author Peter Benke <info@typomotor.de>
 	 */
-	protected function translate(string $key)
+	protected function translate(string $key): ?string
 	{
-
 		return LocalizationUtility::translate($key, 'pb_check_extensions');
-
 	}
 
 }

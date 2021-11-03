@@ -29,7 +29,7 @@ Notifications
         ectension, backend, scheduler
 
     :Copyright:
-        2017
+        2021
 
     :Author:
         Peter Benke
