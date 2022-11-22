@@ -92,7 +92,7 @@ class CheckExtensionsTask extends AbstractTask
 
 			if(
 				// No system extensions
-				!preg_match('#^typo3/sysext#', $extensionData['siteRelPath'])
+				$extensionData['type'] != 'System'
 				&&
 				// Only installed extensions
 				$extensionData['installed'] == '1'
@@ -114,6 +114,7 @@ class CheckExtensionsTask extends AbstractTask
 				echo '<hr>';
 				*/
 
+				$extensionData['version'] = str_replace('v', '', $extensionData['version']);
 				$versionInt = VersionNumberUtility::convertVersionNumberToInteger($extensionData['version']);
 				$extensionObject = $extensionRepository->findHighestAvailableVersion($extensionKey);
 

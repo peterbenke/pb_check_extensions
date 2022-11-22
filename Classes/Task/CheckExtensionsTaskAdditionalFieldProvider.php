@@ -69,22 +69,22 @@ class CheckExtensionsTaskAdditionalFieldProvider extends AbstractAdditionalField
    		return [
 
    			'task_emailSubject' => [
-   				'code' => '<input type="text" name="tx_scheduler[emailSubject]" id="task_emailSubject" value="' . $taskInfo['emailSubject'] . '" />',
+   				'code' => '<input class="form-control" type="text" name="tx_scheduler[emailSubject]" id="task_emailSubject" value="' . $taskInfo['emailSubject'] . '" />',
    				'label' => $this->translate('task.checkExtensionsTask.fieldProvider.emailSubject.label')
    			],
 
    			'task_emailMailFrom' => [
-   				'code' => '<input type="text" name="tx_scheduler[emailMailFrom]" id="task_emailMailFrom" value="' . $taskInfo['emailMailFrom'] . '" />',
+   				'code' => '<input class="form-control" type="text" name="tx_scheduler[emailMailFrom]" id="task_emailMailFrom" value="' . $taskInfo['emailMailFrom'] . '" />',
    				'label' => $this->translate('task.checkExtensionsTask.fieldProvider.emailMailFrom.label')
    			],
 
    			'task_emailMailTo' => [
-   				'code' => '<input type="text" name="tx_scheduler[emailMailTo]" id="task_emailMailTo" value="' . $taskInfo['emailMailTo'] . '" />',
+   				'code' => '<input class="form-control" type="text" name="tx_scheduler[emailMailTo]" id="task_emailMailTo" value="' . $taskInfo['emailMailTo'] . '" />',
    				'label' => $this->translate('task.checkExtensionsTask.fieldProvider.emailMailTo.label')
    			],
 
    			'task_excludeExtensionsFromCheck' => [
-   				'code' => '<textarea name="tx_scheduler[excludeExtensionsFromCheck]" id="task_excludeExtensionsFromCheck">' . $taskInfo['excludeExtensionsFromCheck'] . '</textarea>',
+   				'code' => '<textarea class="form-control" name="tx_scheduler[excludeExtensionsFromCheck]" id="task_excludeExtensionsFromCheck">' . $taskInfo['excludeExtensionsFromCheck'] . '</textarea>',
    				'label' => $this->translate('task.checkExtensionsTask.fieldProvider.excludeExtensionsFromCheck.label')
    			],
 
