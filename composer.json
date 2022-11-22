@@ -1,30 +1,30 @@
 {
-  "name": "peterbenke/pb-check-extensions",
-  "type": "typo3-cms-extension",
-  "description": "Checks, if there are updates available for installed extensions and sends an email",
-  "keywords": [
-    "TYPO3",
-    "extension",
-    "backend",
-    "scheduler"
-  ],
-  "homepage": "http://www.typomotor.de",
-  "authors": [
-    {
-      "name": "Peter Benke",
-      "role": "Developer",
-      "homepage": "http://www.typomotor.de"
+    "name": "peterbenke/pb-check-extensions",
+    "type": "typo3-cms-extension",
+    "description": "Checks, if there are updates available for installed extensions and sends an email",
+    "keywords": ["TYPO3", "extension", "backend", "scheduler"],
+    "homepage": "http://www.typomotor.de",
+    "authors": [
+        {
+            "name": "Peter Benke",
+            "role": "Developer",
+            "homepage": "http://www.typomotor.de"
+        }
+    ],
+    "license": [
+        "GPL-2.0+"
+    ],
+    "require": {
+        "typo3/cms-core": "^11.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "PeterBenke\\PbCheckExtensions\\": "Classes"
+        }
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "pb_check_extensions"
+        }
     }
-  ],
-  "license": [
-    "GPL-2.0+"
-  ],
-  "require": {
-    "typo3/cms-core": "^10.4"
-  },
-  "autoload": {
-    "psr-4": {
-      "PeterBenke\\PbCheckExtensions\\": "Classes"
-    }
-  }
 }
