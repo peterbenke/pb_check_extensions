@@ -3,7 +3,6 @@ namespace PeterBenke\PbCheckExtensions\Utility;
 
 /**
  * Class StringUtility
- * @package PeterBenke\PbCheckExtensions\Utility
  * @author Peter Benke <info@typomotor.de>
  */
 class StringUtility

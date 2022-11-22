@@ -11,13 +11,14 @@ use PeterBenke\PbCheckExtensions\Utility\StringUtility as PBStringUtility;
  */
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Scheduler\AbstractAdditionalFieldProvider;
 use TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
 
 /**
  * class CheckExtensionsTaskAdditionalFieldProvider
  */
-class CheckExtensionsTaskAdditionalFieldProvider extends \TYPO3\CMS\Scheduler\AbstractAdditionalFieldProvider
+class CheckExtensionsTaskAdditionalFieldProvider extends AbstractAdditionalFieldProvider
 {
     /**
      * Create additional fields
@@ -90,6 +91,7 @@ class CheckExtensionsTaskAdditionalFieldProvider extends \TYPO3\CMS\Scheduler\Ab
    		];
 
    	}
+
     /**
      * Validates the input value(s)
      * @param array $submittedData
@@ -133,8 +135,7 @@ class CheckExtensionsTaskAdditionalFieldProvider extends \TYPO3\CMS\Scheduler\Ab
    			return true;
    		}
 
-   		$message = implode(' / ', $errorMessages);
-   		$schedulerModule->__call('addMessage', [$message, AbstractMessage::ERROR]);
+		$this->addMessage(implode(' / ', $errorMessages),AbstractMessage::ERROR);
    		return false;
 
    	}

@@ -12,6 +12,7 @@ use PeterBenke\PbCheckExtensions\Utility\StringUtility as PBStringUtility;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
+use TYPO3\CMS\Extbase\Object\Exception as TYPO3CMSExtbaseObjectException;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Extensionmanager\Domain\Model\Extension;
@@ -26,28 +27,29 @@ class CheckExtensionsTask extends AbstractTask
 {
 
 	/**
-	 * @var string
+	 * @var string|null
 	 */
-	public $emailSubject;
+	public ?string $emailSubject;
 
 	/**
-	 * @var string
+	 * @var string|null
 	 */
-	public $emailMailFrom;
+	public ?string $emailMailFrom;
 
 	/**
-	 * @var string
+	 * @var string|null
 	 */
-	public $emailMailTo;
+	public ?string $emailMailTo;
 
 	/**
-	 * @var string
+	 * @var string|null
 	 */
-	public $excludeExtensionsFromCheck;
+	public ?string $excludeExtensionsFromCheck;
 
 	/**
 	 * Executes the scheduler job
 	 * @return bool
+	 * @throws TYPO3CMSExtbaseObjectException
 	 */
 	public function execute(): bool
 	{
@@ -59,6 +61,7 @@ class CheckExtensionsTask extends AbstractTask
 
 	/**
 	 * Checks, if there are updates available for installed extensions
+	 * @throws TYPO3CMSExtbaseObjectException
 	 * @author Peter Benke <info@typomotor.de>
 	 */
 	protected function checkExtensions()
@@ -79,8 +82,6 @@ class CheckExtensionsTask extends AbstractTask
 		$extensions = $listUtility->getAvailableAndInstalledExtensionsWithAdditionalInformation();
 
         $email = $objectManager->get(MailMessage::class);
-
-
 		$emailSuccessMessage = '';
 		$emailErrorMessage = '';
 
