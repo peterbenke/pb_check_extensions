@@ -1,56 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff version="1.0">
-	<file source-language="en" datatype="plaintext" original="messages" date="2017-12-19T10:00:00Z" product-name="pb_check_extensions">
-		<header/>
-		<body>
-			<trans-unit id="task.checkExtensionsTask.title">
-				<source>Check extensions for updates</source>
-			</trans-unit>
-			<trans-unit id="task.checkExtensionsTask.description">
-				<source>Checks, if there are updates available for installed extensions and sends an email</source>
-			</trans-unit>
-			<trans-unit id="task.checkExtensionsTask.current">
-				<source>Current:</source>
-			</trans-unit>
-			<trans-unit id="task.checkExtensionsTask.available">
-				<source>Available:</source>
-			</trans-unit>
-			<trans-unit id="task.checkExtensionsTask.extensions">
-				<source>Extensions:</source>
-			</trans-unit>
-			<trans-unit id="task.checkExtensionsTask.error">
-				<source>Error</source>
-			</trans-unit>
-			<trans-unit id="task.checkExtensionsTask.email.success.intro.1">
-				<source>New extension versions available:</source>
-			</trans-unit>
-			<trans-unit id="task.checkExtensionsTask.email.error.intro.1">
-				<source>The following extensions could not be found in extension list.</source>
-			</trans-unit>
-			<trans-unit id="task.checkExtensionsTask.email.error.intro.2">
-				<source>Maybe TYPO3 could not update this extension for the extension list or you did not update the extension list before...?</source>
-			</trans-unit>
-			<trans-unit id="task.checkExtensionsTask.email.error.intro.3">
-				<source>(You can exclude extensions in the scheduler configuration)</source>
-			</trans-unit>
-			<trans-unit id="task.checkExtensionsTask.fieldProvider.emailSubject.label">
-				<source>Email subject</source>
-			</trans-unit>
-			<trans-unit id="task.checkExtensionsTask.fieldProvider.emailMailFrom.label">
-				<source>Email address from</source>
-			</trans-unit>
-			<trans-unit id="task.checkExtensionsTask.fieldProvider.emailMailTo.label">
-				<source>Send email to addresses (comma separated)</source>
-			</trans-unit>
-			<trans-unit id="task.checkExtensionsTask.fieldProvider.excludeExtensionsFromCheck.label">
-				<source>Exclude extensions (key) from check (comma separated)</source>
-			</trans-unit>
-			<trans-unit id="task.checkExtensionsTask.fieldProvider.emailSubject.validation">
-				<source>Please input an email subject</source>
-			</trans-unit>
-			<trans-unit id="task.checkExtensionsTask.fieldProvider.emailMail.validation">
-				<source>Email address is not valid</source>
-			</trans-unit>
-		</body>
-	</file>
+    <file source-language="en" datatype="plaintext" original="messages" date="2017-12-19T10:00:00Z"
+          product-name="pb_check_extensions">
+        <header/>
+        <body>
+            <trans-unit id="task.checkExtensionsTask.title">
+                <source>Check extensions for updates</source>
+            </trans-unit>
+            <trans-unit id="task.checkExtensionsTask.description">
+                <source>Checks, if there are updates available for installed extensions and sends an email</source>
+            </trans-unit>
+            <trans-unit id="task.checkExtensionsTask.current">
+                <source>Current:</source>
+            </trans-unit>
+            <trans-unit id="task.checkExtensionsTask.available">
+                <source>Available:</source>
+            </trans-unit>
+            <trans-unit id="task.checkExtensionsTask.extensions">
+                <source>Extensions:</source>
+            </trans-unit>
+            <trans-unit id="task.checkExtensionsTask.error">
+                <source>Error</source>
+            </trans-unit>
+            <trans-unit id="task.checkExtensionsTask.email.success.intro.1">
+                <source>New extension versions available:</source>
+            </trans-unit>
+            <trans-unit id="task.checkExtensionsTask.email.error.intro.1">
+                <source>The following extensions could not be found in extension list.</source>
+            </trans-unit>
+            <trans-unit id="task.checkExtensionsTask.email.error.intro.2">
+                <source>Maybe TYPO3 could not update this extension for the extension list or you did not update the
+                    extension list before...?
+                </source>
+            </trans-unit>
+            <trans-unit id="task.checkExtensionsTask.email.error.intro.3">
+                <source>(You can exclude extensions in the scheduler configuration)</source>
+            </trans-unit>
+            <trans-unit id="task.checkExtensionsTask.fieldProvider.emailSubject.label">
+                <source>Email subject</source>
+            </trans-unit>
+            <trans-unit id="task.checkExtensionsTask.fieldProvider.emailMailFrom.label">
+                <source>Email address from</source>
+            </trans-unit>
+            <trans-unit id="task.checkExtensionsTask.fieldProvider.emailMailTo.label">
+                <source>Send email to addresses (comma separated)</source>
+            </trans-unit>
+            <trans-unit id="task.checkExtensionsTask.fieldProvider.excludeExtensionsFromCheck.label">
+                <source>Exclude extensions (key) from check (comma separated)</source>
+            </trans-unit>
+            <trans-unit id="task.checkExtensionsTask.fieldProvider.emailSubject.validation">
+                <source>Please input an email subject</source>
+            </trans-unit>
+            <trans-unit id="task.checkExtensionsTask.fieldProvider.emailMail.validation">
+                <source>Email address is not valid</source>
+            </trans-unit>
+        </body>
+    </file>
 </xliff>

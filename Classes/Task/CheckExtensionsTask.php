@@ -1,189 +1,215 @@
 <?php
+
 namespace PeterBenke\PbCheckExtensions\Task;
 
 /**
  * PbCheckExtensions
  */
+
 use PeterBenke\PbCheckExtensions\Utility\StringUtility as PBStringUtility;
 
 /**
  * TYPO3
  */
+
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
-use TYPO3\CMS\Extbase\Object\Exception as TYPO3CMSExtbaseObjectException;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Extensionmanager\Domain\Model\Extension;
 use TYPO3\CMS\Extensionmanager\Domain\Repository\ExtensionRepository;
 use TYPO3\CMS\Extensionmanager\Utility\ListUtility;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
 
-/**
- * Class CheckExtensionsTask
- */
 class CheckExtensionsTask extends AbstractTask
 {
 
-	/**
-	 * @var string|null
-	 */
-	public ?string $emailSubject;
+    /**
+     * @var string|null
+     */
+    protected ?string $emailSubject;
 
-	/**
-	 * @var string|null
-	 */
-	public ?string $emailMailFrom;
+    /**
+     * @var string|null
+     */
+    protected ?string $emailMailFrom;
 
-	/**
-	 * @var string|null
-	 */
-	public ?string $emailMailTo;
+    /**
+     * @var string|null
+     */
+    protected ?string $emailMailTo;
 
-	/**
-	 * @var string|null
-	 */
-	public ?string $excludeExtensionsFromCheck;
+    /**
+     * @var string|null
+     */
+    protected ?string $excludeExtensionsFromCheck;
 
-	/**
-	 * Executes the scheduler job
-	 * @return bool
-	 * @throws TYPO3CMSExtbaseObjectException
-	 */
-	public function execute(): bool
-	{
+    public function getEmailSubject(): ?string
+    {
+        return $this->emailSubject;
+    }
 
-		$this->checkExtensions();
-		return true;
+    public function setEmailSubject(?string $emailSubject): void
+    {
+        $this->emailSubject = $emailSubject;
+    }
 
-	}
+    public function getEmailMailFrom(): ?string
+    {
+        return $this->emailMailFrom;
+    }
 
-	/**
-	 * Checks, if there are updates available for installed extensions
-	 * @throws TYPO3CMSExtbaseObjectException
-	 * @author Peter Benke <info@typomotor.de>
-	 */
-	protected function checkExtensions()
-	{
+    public function setEmailMailFrom(?string $emailMailFrom): void
+    {
+        $this->emailMailFrom = $emailMailFrom;
+    }
 
-		/**
-		 * @var ObjectManager $objectManager
-		 * @var ListUtility $listUtility
-		 * @var ExtensionRepository $extensionRepository
-		 * @var MailMessage $email
-		 */
+    public function getEmailMailTo(): ?string
+    {
+        return $this->emailMailTo;
+    }
 
-		// Create objects
-		$objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-		$listUtility = $objectManager->get(ListUtility::class);
+    public function setEmailMailTo(?string $emailMailTo): void
+    {
+        $this->emailMailTo = $emailMailTo;
+    }
 
-		$extensionRepository = $objectManager->get(ExtensionRepository::class);
-		$extensions = $listUtility->getAvailableAndInstalledExtensionsWithAdditionalInformation();
+    public function getExcludeExtensionsFromCheck(): ?string
+    {
+        return $this->excludeExtensionsFromCheck;
+    }
 
-        $email = $objectManager->get(MailMessage::class);
-		$emailSuccessMessage = '';
-		$emailErrorMessage = '';
+    public function setExcludeExtensionsFromCheck(?string $excludeExtensionsFromCheck): void
+    {
+        $this->excludeExtensionsFromCheck = $excludeExtensionsFromCheck;
+    }
 
-		$excludeExtensions = PBStringUtility::explodeAndTrim(',', $this->excludeExtensionsFromCheck);
+    /**
+     * Executes the scheduler job
+     * @return bool
+     * @author Peter Benke <info@typomotor.de>
+     */
+    public function execute(): bool
+    {
+        $this->checkExtensions();
+        return true;
+    }
 
-		// Loop through the installed extensions
-		foreach($extensions as $extensionKey => $extensionData){
+    /**
+     * Checks, if there are updates available for installed extensions
+     * @return void
+     * @author Peter Benke <info@typomotor.de>
+     */
+    protected function checkExtensions(): void
+    {
 
-			if(
-				// No system extensions
-				$extensionData['type'] != 'System'
-				&&
-				// Only installed extensions
-				$extensionData['installed'] == '1'
-				&&
-				// Only extensions, which are not excluded
-				!in_array($extensionKey, $excludeExtensions)
-			){
+        /**
+         * @var ListUtility $listUtility
+         * @var ExtensionRepository $extensionRepository
+         * @var MailMessage $mailMessage
+         */
+        $listUtility = GeneralUtility::makeInstance(ListUtility::class);
+        $extensionRepository = GeneralUtility::makeInstance(ExtensionRepository::class);
+        $mailMessage = GeneralUtility::makeInstance(MailMessage::class);
 
-				/*
-				echo $extensionKey . ':<br>';
-				echo 'Title: ' . $extensionData['title'];
-				echo '<br>';
-				echo 'SiteRelPath: ' . $extensionData['siteRelPath'];
-				echo '<br>';
-				echo 'Version: ' . $extensionData['version'];
-				echo '<br>';
-				echo 'Installed: ' . $extensionData['installed'];
-				echo '<br>';
-				echo '<hr>';
-				*/
+        $extensions = $listUtility->getAvailableAndInstalledExtensionsWithAdditionalInformation();
+        $emailSuccessMessage = '';
+        $emailErrorMessage = '';
 
-				$extensionData['version'] = str_replace('v', '', $extensionData['version']);
-				$versionInt = VersionNumberUtility::convertVersionNumberToInteger($extensionData['version']);
-				$extensionObject = $extensionRepository->findHighestAvailableVersion($extensionKey);
+        $excludeExtensions = PBStringUtility::explodeAndTrim(',', $this->excludeExtensionsFromCheck);
 
-				if ($extensionObject instanceof Extension){
+        // print_r($extensions);
 
-					$highestAvailableVersion = $extensionObject->getVersion();
-					$highestAvailableVersionInt = VersionNumberUtility::convertVersionNumberToInteger($highestAvailableVersion);
+        // Loop through the installed extensions
+        foreach ($extensions as $extensionKey => $extensionData) {
 
-					if($highestAvailableVersionInt > $versionInt){
-						$emailSuccessMessage .= $extensionKey . ':' . PHP_EOL;
-						$emailSuccessMessage .= $this->translate('task.checkExtensionsTask.current') . ' ' . $extensionData['version'];
-						$emailSuccessMessage .= ' / ';
-						$emailSuccessMessage .= $this->translate('task.checkExtensionsTask.available') . ' ' .$highestAvailableVersion . PHP_EOL;
-						$emailSuccessMessage .= PHP_EOL;
-					}
+            if (
+                // No system extensions
+                $extensionData['type'] != 'System'
+                &&
+                // Only installed extensions
+                $extensionData['installed'] == '1'
+                &&
+                // Only extensions, which are not excluded
+                !in_array($extensionKey, $excludeExtensions)
+            ) {
 
-				}else{
-					$emailErrorMessage .= '- ' . $extensionKey . PHP_EOL;
-				}
+                /*
+                echo '<pre>';
+                print_r(['Extension key'=> $extensionKey]);
+                print_r($extensionData);
+                echo '</pre>';
+                */
 
-				unset($versionInt, $extensionObject, $highestAvailableVersion, $highestAvailableVersionInt);
+                // Note: version 'dev-master' will be also supported
+                $extensionData['version'] = str_replace('v', '', $extensionData['version']);
+                $versionInt = VersionNumberUtility::convertVersionNumberToInteger($extensionData['version']);
+                $extensionObject = $extensionRepository->findHighestAvailableVersion($extensionKey);
 
-			}
+                if ($extensionObject instanceof Extension) {
 
-		}
+                    $highestAvailableVersion = $extensionObject->getVersion();
+                    $highestAvailableVersionInt = VersionNumberUtility::convertVersionNumberToInteger($highestAvailableVersion);
 
-		$emailTos = PBStringUtility::explodeAndTrim(',', $this->emailMailTo);
+                    if ($highestAvailableVersionInt > $versionInt) {
+                        $emailSuccessMessage .= $extensionKey . ':' . PHP_EOL;
+                        $emailSuccessMessage .= $this->translate('task.checkExtensionsTask.current') . ' ' . $extensionData['version'];
+                        $emailSuccessMessage .= ' / ';
+                        $emailSuccessMessage .= $this->translate('task.checkExtensionsTask.available') . ' ' . $highestAvailableVersion . PHP_EOL;
+                        $emailSuccessMessage .= PHP_EOL;
+                    }
 
-		if(!empty($emailSuccessMessage)){
-			$emailSuccessMessageIntro = '';
-			$emailSuccessMessageIntro.= $this->translate('task.checkExtensionsTask.email.success.intro.1');
-			$emailSuccessMessageIntro .= PHP_EOL . PHP_EOL;
-			$email
-				->setFrom($this->emailMailFrom)
-				->setTo($emailTos)
-				->setSubject($this->emailSubject)
-				->text($emailSuccessMessageIntro . $emailSuccessMessage)
-				->html($emailSuccessMessageIntro ."<hr><br>" . nl2br( $emailSuccessMessage))
-				->send();
-		}
+                } else {
+                    $emailErrorMessage .= '- ' . $extensionKey . PHP_EOL;
+                }
 
-		if(!empty($emailErrorMessage)){
-			$emailErrorMessageIntro = $this->translate('task.checkExtensionsTask.email.error.intro.1') . PHP_EOL;
-			$emailErrorMessageIntro .= $this->translate('task.checkExtensionsTask.email.error.intro.2')  . PHP_EOL;
-			$emailErrorMessageIntro .= $this->translate('task.checkExtensionsTask.email.error.intro.3')  . PHP_EOL;
-			$emailErrorMessageIntro .= PHP_EOL;
-			$emailErrorMessageIntro .= $this->translate('task.checkExtensionsTask.extensions')  . PHP_EOL;
-			$emailErrorMessageIntro .= PHP_EOL;
-			$email
-				->setFrom($this->emailMailFrom)
-				->setTo($emailTos)
-				->setSubject($this->emailSubject . ' - ' . $this->translate('task.checkExtensionsTask.error'))
-				->text($emailErrorMessageIntro . $emailErrorMessage)
-				->html($emailErrorMessageIntro . "<hr><br>" . nl2br($emailErrorMessage))
-				->send();
-		}
+                unset($versionInt, $extensionObject, $highestAvailableVersion, $highestAvailableVersionInt);
 
-	}
+            }
 
-	/**
-	 * @param string $key
-	 * @return string|null
-	 * @author Peter Benke <info@typomotor.de>
-	 */
-	protected function translate(string $key): ?string
-	{
+        }
 
-		return LocalizationUtility::translate($key, 'pb_check_extensions');
+        $emailTos = PBStringUtility::explodeAndTrim(',', $this->emailMailTo);
 
-	}
+        if (!empty($emailSuccessMessage)) {
+            $emailSuccessMessageIntro = '';
+            $emailSuccessMessageIntro .= $this->translate('task.checkExtensionsTask.email.success.intro.1');
+            $emailSuccessMessageIntro .= PHP_EOL . PHP_EOL;
+            $mailMessage
+                ->setFrom($this->emailMailFrom)
+                ->setTo($emailTos)
+                ->setSubject($this->emailSubject)
+                ->text($emailSuccessMessageIntro . $emailSuccessMessage)
+                ->html($emailSuccessMessageIntro . "<hr><br>" . nl2br($emailSuccessMessage))
+                ->send();
+        }
+
+        if (!empty($emailErrorMessage)) {
+            $emailErrorMessageIntro = $this->translate('task.checkExtensionsTask.email.error.intro.1') . PHP_EOL;
+            $emailErrorMessageIntro .= $this->translate('task.checkExtensionsTask.email.error.intro.2') . PHP_EOL;
+            $emailErrorMessageIntro .= $this->translate('task.checkExtensionsTask.email.error.intro.3') . PHP_EOL;
+            $emailErrorMessageIntro .= PHP_EOL;
+            $emailErrorMessageIntro .= $this->translate('task.checkExtensionsTask.extensions') . PHP_EOL;
+            $emailErrorMessageIntro .= PHP_EOL;
+            $mailMessage
+                ->setFrom($this->emailMailFrom)
+                ->setTo($emailTos)
+                ->setSubject($this->emailSubject . ' - ' . $this->translate('task.checkExtensionsTask.error'))
+                ->text($emailErrorMessageIntro . $emailErrorMessage)
+                ->html($emailErrorMessageIntro . "<hr><br>" . nl2br($emailErrorMessage))
+                ->send();
+        }
+
+    }
+
+    /**
+     * @param string $key
+     * @return string|null
+     * @author Peter Benke <info@typomotor.de>
+     */
+    protected function translate(string $key): ?string
+    {
+        return LocalizationUtility::translate($key, 'PbCheckExtensions');
+    }
 
 }

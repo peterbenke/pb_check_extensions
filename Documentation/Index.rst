@@ -8,7 +8,7 @@
 .. _start:
 
 =============
-Notifications
+Check extensions
 =============
 
 .. only:: html
@@ -26,10 +26,10 @@ Notifications
         Checks, if there are updates available for installed extensions and sends an email.
 
     :Keywords:
-        ectension, backend, scheduler
+        extension, backend, scheduler
 
     :Copyright:
-        2022
+        2024
 
     :Author:
         Peter Benke
@@ -48,13 +48,6 @@ Notifications
     a GNU/GPL CMS/Framework available from `www.typo3.org <https://typo3.org/>`__.
 
 
-    **Table of Contents**
+    **Documentation**
 
-.. toctree::
-    :maxdepth: 3
-    :titlesonly:
-
-    Introduction/Index
-    Administration/Index
-    KnownProblems/Index
-    Changelog/Index
+	See documentation on `github <https://github.com/peterbenke/pb_check_extensions>`__.
