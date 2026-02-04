@@ -3,7 +3,7 @@
 use PeterBenke\PbCheckExtensions\Task\CheckExtensionsTask;
 use PeterBenke\PbCheckExtensions\Task\CheckExtensionsTaskAdditionalFieldProvider;
 
-defined('TYPO3') or die();
+defined('TYPO3') || die();
 
 // Scheduler Job: Check extensions
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks'][CheckExtensionsTask::class] = [

@@ -27,22 +27,22 @@ class CheckExtensionsTask extends AbstractTask
     /**
      * @var string|null
      */
-    protected ?string $emailSubject;
+    protected ?string $emailSubject = null;
 
     /**
      * @var string|null
      */
-    protected ?string $emailMailFrom;
+    protected ?string $emailMailFrom = null;
 
     /**
      * @var string|null
      */
-    protected ?string $emailMailTo;
+    protected ?string $emailMailTo = null;
 
     /**
      * @var string|null
      */
-    protected ?string $excludeExtensionsFromCheck;
+    protected ?string $excludeExtensionsFromCheck = null;
 
     public function getEmailSubject(): ?string
     {

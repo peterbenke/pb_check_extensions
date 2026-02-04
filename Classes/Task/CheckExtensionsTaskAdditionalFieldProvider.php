@@ -16,6 +16,7 @@ use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Scheduler\AbstractAdditionalFieldProvider;
 use TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
+use TYPO3\CMS\Scheduler\SchedulerManagementAction;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
 
 class CheckExtensionsTaskAdditionalFieldProvider extends AbstractAdditionalFieldProvider
@@ -31,60 +32,36 @@ class CheckExtensionsTaskAdditionalFieldProvider extends AbstractAdditionalField
     public function getAdditionalFields(array &$taskInfo, $task, SchedulerModuleController $schedulerModule): array
     {
 
-        $cmd = $schedulerModule->getCurrentAction();
+        $currentAction = $schedulerModule->getCurrentAction();
 
-        if (empty($taskInfo['emailSubject'])) {
-            if ($cmd == 'add') {
-                $taskInfo['emailSubject'] = '';
-            } else {
-                $taskInfo['emailSubject'] = $task->getEmailSubject();
-            }
-        }
-
-        if (empty($taskInfo['emailMailFrom'])) {
-            if ($cmd == 'add') {
-                $taskInfo['emailMailFrom'] = '';
-            } else {
-                $taskInfo['emailMailFrom'] = $task->getEmailMailFrom();
-            }
-        }
-
-        if (empty($taskInfo['emailMailTo'])) {
-            if ($cmd == 'add') {
-                $taskInfo['emailMailTo'] = '';
-            } else {
-                $taskInfo['emailMailTo'] = $task->getEmailMailTo();
-            }
-        }
-
-        if (empty($taskInfo['excludeExtensionsFromCheck'])) {
-            if ($cmd == 'add') {
-                $taskInfo['excludeExtensionsFromCheck'] = '';
-            } else {
-                $taskInfo['excludeExtensionsFromCheck'] = $task->getExcludeExtensionsFromCheck();
-            }
+        // On adding a new task => $task is null
+        if ($currentAction === SchedulerManagementAction::EDIT) {
+            $taskInfo['emailSubject'] = $task->getEmailSubject();
+            $taskInfo['emailMailFrom'] = $task->getEmailMailFrom();
+            $taskInfo['emailMailTo'] = $task->getEmailMailTo();
+            $taskInfo['excludeExtensionsFromCheck'] = $task->getExcludeExtensionsFromCheck();
         }
 
         // Input fields
         return [
 
             'task_emailSubject' => [
-                'code' => '<input class="form-control" type="text" name="tx_scheduler[emailSubject]" id="task_emailSubject" value="' . $taskInfo['emailSubject'] . '" />',
+                'code' => '<input class="form-control" type="text" name="tx_scheduler[emailSubject]" id="task_emailSubject" value="' . ($taskInfo['emailSubject'] ?? '') . '" />',
                 'label' => $this->translate('task.checkExtensionsTask.fieldProvider.emailSubject.label')
             ],
 
             'task_emailMailFrom' => [
-                'code' => '<input class="form-control" type="text" name="tx_scheduler[emailMailFrom]" id="task_emailMailFrom" value="' . $taskInfo['emailMailFrom'] . '" />',
+                'code' => '<input class="form-control" type="text" name="tx_scheduler[emailMailFrom]" id="task_emailMailFrom" value="' . ($taskInfo['emailMailFrom'] ?? '') . '" />',
                 'label' => $this->translate('task.checkExtensionsTask.fieldProvider.emailMailFrom.label')
             ],
 
             'task_emailMailTo' => [
-                'code' => '<input class="form-control" type="text" name="tx_scheduler[emailMailTo]" id="task_emailMailTo" value="' . $taskInfo['emailMailTo'] . '" />',
+                'code' => '<input class="form-control" type="text" name="tx_scheduler[emailMailTo]" id="task_emailMailTo" value="' . ($taskInfo['emailMailTo'] ?? '') . '" />',
                 'label' => $this->translate('task.checkExtensionsTask.fieldProvider.emailMailTo.label')
             ],
 
             'task_excludeExtensionsFromCheck' => [
-                'code' => '<textarea class="form-control" name="tx_scheduler[excludeExtensionsFromCheck]" id="task_excludeExtensionsFromCheck">' . $taskInfo['excludeExtensionsFromCheck'] . '</textarea>',
+                'code' => '<textarea class="form-control" name="tx_scheduler[excludeExtensionsFromCheck]" id="task_excludeExtensionsFromCheck">' . ($taskInfo['excludeExtensionsFromCheck'] ?? '') . '</textarea>',
                 'label' => $this->translate('task.checkExtensionsTask.fieldProvider.excludeExtensionsFromCheck.label')
             ],
 
@@ -105,9 +82,9 @@ class CheckExtensionsTaskAdditionalFieldProvider extends AbstractAdditionalField
         $ok = true;
         $errorMessages = [];
 
-        $submittedData['emailSubject'] = trim($submittedData['emailSubject']);
-        $submittedData['emailMailFrom'] = trim($submittedData['emailMailFrom']);
-        $submittedData['emailMailTo'] = trim($submittedData['emailMailTo']);
+        $submittedData['emailSubject'] = trim((string)$submittedData['emailSubject']);
+        $submittedData['emailMailFrom'] = trim((string)$submittedData['emailMailFrom']);
+        $submittedData['emailMailTo'] = trim((string)$submittedData['emailMailTo']);
 
         // Validate email subject
         if (empty($submittedData['emailSubject'])) {
@@ -149,10 +126,10 @@ class CheckExtensionsTaskAdditionalFieldProvider extends AbstractAdditionalField
      */
     public function saveAdditionalFields(array $submittedData, $task): void
     {
-        $task->setEmailSubject(trim($submittedData['emailSubject']));
-        $task->setEmailMailFrom(trim($submittedData['emailMailFrom']));
-        $task->setEmailMailTo(trim($submittedData['emailMailTo']));
-        $task->setExcludeExtensionsFromCheck(trim($submittedData['excludeExtensionsFromCheck']));
+        $task->setEmailSubject(trim((string)$submittedData['emailSubject']));
+        $task->setEmailMailFrom(trim((string)$submittedData['emailMailFrom']));
+        $task->setEmailMailTo(trim((string)$submittedData['emailMailTo']));
+        $task->setExcludeExtensionsFromCheck(trim((string) $submittedData['excludeExtensionsFromCheck']));
     }
 
     /**

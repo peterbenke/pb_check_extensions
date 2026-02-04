@@ -14,7 +14,7 @@ class StringUtility
      */
     public static function explodeAndTrim($delimiter, $string): array
     {
-        return array_map('trim', explode($delimiter, $string));
+        return array_map(trim(...), explode($delimiter, (string) $string));
     }
 
 }

@@ -29,18 +29,3 @@ Install this extension via composer
 
 To get this extension running, you also have to create a system scheduler job **extensionmanager** => "Update extension list".
 Take care to run this scheduler job **before** the pb_check_extensions-job.
-
-### Change log
-
-| Version | Changes                    |
-|---------|----------------------------|
-| 12.4.0  | Compatibility TYPO3 12     |
-| 11.5.1  | Some cleanups              |
-| 11.5.0  | Compatibility TYPO3 11     |
-| 10.4.0  | Some cleanups              |
-| 3.0.0   | Compatibility TYPO3 10     |
-| 2.0.0   | Compatibility TYPO3 9      |
-| 1.1.0   | Bugfix Namespace Utilities |
-| 1.0.1   | Update documentation       |     
-| 1.0.0   | Init Version               |            
-
